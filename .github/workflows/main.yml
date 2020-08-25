@@ -1,0 +1,21 @@
+name: "daily ci"
+
+on:
+  schedule:
+    - cron: "0 9 * * * "
+  push:
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install latest nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
+    - name: Release Build
+      run: |
+        cargo build --release
