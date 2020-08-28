@@ -4,17 +4,23 @@ on:
   schedule:
     - cron: "0 9 * * * "
   push:
-
+    branches:
+      - "*"
+  
 jobs:
   build:
     name: "Build"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchains: ["nightly", "stable"]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - name: Install latest nightly
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly
+        toolchain: ${{ matrix.toolchains }}
         override: true
     - name: Release Build
       run: |
